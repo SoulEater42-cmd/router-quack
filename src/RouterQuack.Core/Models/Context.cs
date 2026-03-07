@@ -1,3 +1,4 @@
+using RouterQuack.Core.ConfigFileWriters;
 using RouterQuack.Core.IntentFileParsers;
 using RouterQuack.Core.Processors;
 using RouterQuack.Core.Validators;
@@ -37,12 +38,19 @@ public class Context
             case IIntentFileParser intentFileParser:
                 intentFileParser.ReadFiles(FilePaths);
                 break;
+
             case IValidator validator:
                 validator.Validate();
                 break;
+
             case IProcessor processor:
                 processor.Process();
                 break;
+
+            case IConfigFileWriter configFileWriter:
+                configFileWriter.WriteFiles(OutputDirectoryPath);
+                break;
+
             default:
                 throw new ArgumentException("Unsupported step type", nameof(step));
         }

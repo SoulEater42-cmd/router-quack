@@ -10,23 +10,16 @@ using Serilog;
 // Dependency injection
 using var serviceScope = DependencyInjection.CreateServiceScope(args);
 var di = serviceScope.ServiceProvider;
-
-// Arguments parser
 var context = di.GetRequiredService<Context>();
 
 // Pipeline
-var intentFileReader = di.GetRequiredService<IIntentFileParser>();
-var step1ResolveNeighbours = di.GetRequiredKeyedService<IProcessor>(nameof(ResolveNeighbours));
-var step3GenerateIpAddresses = di.GetRequiredKeyedService<IProcessor>(nameof(GenerateLinkAddresses));
-var step4GenerateLoopbackAddresses = di.GetRequiredKeyedService<IProcessor>(nameof(GenerateLoopbackAddresses));
-
 try
 {
     // Read intent file
-    context.ExecuteStep(intentFileReader);
+    context.ExecuteStep(di.GetRequiredService<IIntentFileParser>());
 
     // Resolve neighbours first
-    context.ExecuteStep(step1ResolveNeighbours);
+    context.ExecuteStep(di.GetRequiredKeyedService<IProcessor>(nameof(ResolveNeighbours)));
 
     // Execute validators
     Log.Information("Validating intent...");
@@ -38,8 +31,8 @@ try
         .ExecuteStep(di.GetRequiredKeyedService<IValidator>(nameof(ValidNetworkSpaces)));
 
     // Execute other processors
-    context.ExecuteStep(step3GenerateIpAddresses)
-        .ExecuteStep(step4GenerateLoopbackAddresses);
+    context.ExecuteStep(di.GetRequiredKeyedService<IProcessor>(nameof(GenerateLinkAddresses)))
+        .ExecuteStep(di.GetRequiredKeyedService<IProcessor>(nameof(GenerateLoopbackAddresses)));
 }
 catch (StepException)
 {
