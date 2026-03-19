@@ -14,6 +14,7 @@ internal static class ContextFactory
             FilePaths = [],
             OutputDirectoryPath = Path.GetTempPath(),
             Verbosity = verbosity,
+            DebugGraph = false,
             DryRun = false,
             Strict = strict
         };

@@ -62,6 +62,7 @@ dotnet build
 | `--strict`  | `-s`       | Treat warnings as errors               | `false`                 |
 | `--version` | None       | Print ASCII art and version and exit   | `false`                 |
 | `--help`    | `-h`, `-?` | Print help section and exit            | `false`                 |
+| `--debug`   | `-d`       | Print debug graph                      | `false`                 |
 
 ## Intent file format
 

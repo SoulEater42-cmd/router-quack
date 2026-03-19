@@ -28,7 +28,7 @@ public static class ArgumentsParser
         // Add file option
         Option<IEnumerable<FileInfo>> fileOption = new("--file", "-f")
         {
-            Description = "Intent file to process.",
+            Description = "Intent file to process",
             Arity = ArgumentArity.OneOrMore,
             Required = true,
             DefaultValueFactory = _ => [new("examples/default.yaml")],
@@ -38,7 +38,7 @@ public static class ArgumentsParser
         // Add output option
         Option<DirectoryInfo> outputOption = new("--output", "-o")
         {
-            Description = "Output directory. Router configuration files will be generated here.",
+            Description = "Output directory. Router configuration files will be generated here",
             Arity = ArgumentArity.ExactlyOne,
             Required = true,
             DefaultValueFactory = _ => new("output")
@@ -47,29 +47,34 @@ public static class ArgumentsParser
         // Add verbosity options
         Option<bool> quietOption = new("--quiet", "-q")
         {
-            Description = "Set verbosity to quiet. Still shows warnings and errors.",
+            Description = "Set verbosity to quiet. Still shows warnings and errors",
         };
         Option<bool> verboseOption = new("--verbose", "-v")
         {
-            Description = "Set verbosity to detailed."
+            Description = "Set verbosity to detailed"
+        };
+        Option<bool> debugGraphOption = new("--debug", "-d")
+        {
+            Description = "Also print a graph of objects"
         };
 
         // Add dry run option
         Option<bool> dryRunOption = new("--dry-run", "-n")
         {
-            Description = "Dry run. When set, nothing will be written to the routers or the filesystem."
+            Description = "Dry run. When set, nothing will be written to the routers or the filesystem"
         };
 
         // Add strict option
         Option<bool> strictOption = new("--strict", "-s")
         {
-            Description = "Strict mode. When set, treat warnings as errors."
+            Description = "Strict mode. When set, treat warnings as errors"
         };
 
-        var rootCommand = new RootCommand("Generate router configuration files from user-friendly intent files.");
+        var rootCommand = new RootCommand("Generate router configuration files from user-friendly intent files");
         rootCommand.Options.Add(fileOption);
         rootCommand.Options.Add(outputOption);
         rootCommand.Options.Add(verboseOption);
+        rootCommand.Options.Add(debugGraphOption);
         rootCommand.Options.Add(quietOption);
         rootCommand.Options.Add(dryRunOption);
         rootCommand.Options.Add(strictOption);
@@ -90,6 +95,9 @@ public static class ArgumentsParser
                     ? VerbosityLevel.Quiet
                     : VerbosityLevel.Normal;
 
+            // Whether to print debug graph
+            var debugGraph = parseResult.GetValue(debugGraphOption);
+
             // Dry run
             var dryRun = parseResult.GetValue(dryRunOption);
 
@@ -101,6 +109,7 @@ public static class ArgumentsParser
                 FilePaths = filePaths,
                 OutputDirectoryPath = outputDirectoryPath,
                 Verbosity = verbosityLevel,
+                DebugGraph = debugGraph,
                 DryRun = dryRun,
                 Strict = strict
             };

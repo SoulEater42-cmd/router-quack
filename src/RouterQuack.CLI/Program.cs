@@ -55,19 +55,23 @@ try
     }
 
     context.ExecuteStep(di.GetRequiredKeyedService<IConfigFileWriter>(RouterBrand.Cisco));
+
+    Log.Information("Processing complete.");
 }
 catch (StepException)
 {
     Log.Fatal("Exited with errors. Nothing changed.");
-    Log.Debug("ASs summary: {Summary}", context.Asses.Summary());
-    Environment.Exit(1);
+    Environment.ExitCode = 1;
 }
 catch (Exception e)
 {
     Log.Fatal("Unhandled exception occured.");
     Log.Debug("Exception:\n{Exception}", e);
     Log.Debug("ASs summary:\n{Summary}", context.Asses.Summary());
-    Environment.Exit(2);
+    Environment.ExitCode = 2;
 }
-
-Log.Information("Processing complete.");
+finally
+{
+    if (context.DebugGraph)
+        Console.WriteLine("ASs summary: {0}", context.Asses.Summary());
+}

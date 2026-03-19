@@ -32,12 +32,12 @@ public sealed class As
     public override string ToString()
     {
         var str = new StringBuilder();
-        str.Append($"AS number {Number} ");
+        str.Append($"AS {Number} ");
 
         if (Routers.Any(r => r.External))
             str.AppendLine($"(external):");
         else
-            str.AppendLine($"using {Igp.ToString().ToUpper()}:");
+            str.AppendLine($"using {Igp.ToString()}:");
 
         foreach (var router in Routers)
             str.AppendLine(router.ToString());

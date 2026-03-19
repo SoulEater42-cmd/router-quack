@@ -20,6 +20,8 @@ public class Context
 
     public required VerbosityLevel Verbosity { get; init; }
 
+    public required bool DebugGraph { get; init; }
+
     public required bool DryRun { get; init; }
 
     public required bool Strict { get; init; }
