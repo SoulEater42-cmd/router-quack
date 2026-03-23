@@ -26,11 +26,9 @@ We follow the **Fork and Pull** model:
 1. **Create a branch** for your fix/feature (e.g., `git switch -c feature/new-vendor-support`).
 1. **Commit** your changes with clear, descriptive messages.
 1. **Push** to your fork and submit a **Pull Request** against our `main` branch.
-
-### Commit messages
-
-If you want a change to be mentioned in the release notes, it must start with a requarks type.
-Accepted types are : `feature`, `fix`, `perf`, `refactor`, `test`, `chore` and `ci`.
+  
+> [!IMPORTANT]
+> Please enable the **“Allow edits from maintainers”** option when creating the PR, so maintainers can push small fixes (style, CI, rebase) directly to your branch. If you must disable this, let us know in the PR description.
 
 ## Project Architecture
 
