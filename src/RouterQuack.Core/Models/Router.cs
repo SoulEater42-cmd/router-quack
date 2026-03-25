@@ -28,7 +28,7 @@ public sealed class Router
     public override string ToString()
     {
         var str = new StringBuilder();
-        str.AppendLine($"* {Brand.ToString()} router {Name}:");
+        str.AppendLine($"* {Brand.ToString()} router {Name} (ID: {Id?.ToString() ?? "none"}):");
 
         foreach (var @interface in Interfaces)
             str.AppendLine(@interface.ToString());

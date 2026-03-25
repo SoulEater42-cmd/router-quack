@@ -1,24 +1,42 @@
 using System.Net;
 using System.Text;
+using RouterQuack.Core.Models;
 
 namespace RouterQuack.IO.Cisco.Utils;
 
 internal static class OspfConfig
 {
-    internal static void ApplyOspfConfig(StringBuilder builder, IPAddress routerId)
+    internal static void ApplyOspfConfig(StringBuilder builder, IPAddress routerId, IpVersion version)
     {
-        builder.AppendLine(ConfigV6);
-        builder.AppendLine($" router-id {routerId}");
-        builder.AppendLine("!");
+        // To make sure header is inserted without being duplicated
+        var headerSet = false;
 
-        builder.AppendLine(ConfigV4);
-        builder.AppendLine($" router-id {routerId}");
-        builder.AppendLine("!\n!");
+        if (version.HasFlag(IpVersion.IPv6))
+        {
+            builder.AppendLine(ConfigHeader);
+            headerSet = true;
+
+            builder.AppendLine(ConfigV6);
+            builder.AppendLine($" router-id {routerId}");
+            builder.AppendLine("!");
+        }
+
+        // ReSharper disable once InvertIf
+        if (version.HasFlag(IpVersion.IPv4))
+        {
+            if (!headerSet)
+                builder.AppendLine(ConfigHeader);
+
+            builder.AppendLine(ConfigV4);
+            builder.AppendLine($" router-id {routerId}");
+            builder.AppendLine("!\n!");
+        }
     }
+
+    private const string ConfigHeader = "! ================= OSPFv3 =================";
 
     private const string ConfigV6 =
         """
-        ! ================= OSPFv3 =================
         ipv6 router ospf 1
          auto-cost reference-bandwidth 100000
         """;
