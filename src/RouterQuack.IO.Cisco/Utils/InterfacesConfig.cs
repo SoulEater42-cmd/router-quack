@@ -92,6 +92,9 @@ internal static class InterfacesConfig
             builder.AppendLine(' ' + @interface.AdditionalConfig.Replace("\n", "\n ").TrimEnd());
         }
 
+        if (@interface.ParentRouter.ParentAs.Igp == IgpType.MPLS)
+            builder.AppendLine(" mpls ip");
+
         builder.AppendLine("!\n!");
     }
 
